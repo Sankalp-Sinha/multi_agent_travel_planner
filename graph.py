@@ -1,4 +1,5 @@
 import psycopg
+from psycopg.rows import dict_row
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.graph import END, START, StateGraph
 
@@ -102,7 +103,12 @@ def build_graph():
     graph.add_edge("output_guardrail", END)
 
     if DATABASE_URL:
-        conn = psycopg.connect(DATABASE_URL)
+        conn = psycopg.connect(
+            DATABASE_URL,
+            autocommit=True,
+            prepare_threshold=0,
+            row_factory=dict_row,
+        )
         checkpointer = PostgresSaver(conn)
         checkpointer.setup()
         return graph.compile(checkpointer=checkpointer)
