@@ -33,7 +33,8 @@ client = MultiServerMCPClient(
                 "run"
             ],
             "env": {
-                "AVIATION_STACK_API_KEY": AVIATION_STACK_API_KEY
+                **os.environ,
+                "AVIATION_STACK_API_KEY": AVIATION_STACK_API_KEY or ""
             }
         },
 
@@ -41,10 +42,11 @@ client = MultiServerMCPClient(
             "transport": "stdio",
             "command": PYTHON_EXECUTABLE,
             "args": [
-                r"D:\Multi_agent_system_with_mcp\custom_weather_mcp_server.py"
+                str(PROJECT_DIR / "custom_weather_mcp_server.py")
             ],
             "env": {
-                "OPENWEATHER_API_KEY": OPENWEATHER_API_KEY
+                **os.environ,
+                "OPENWEATHER_API_KEY": OPENWEATHER_API_KEY or ""
             }
         }
     }
